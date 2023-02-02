@@ -123,7 +123,6 @@ def test_css_selectors(browser, root_url):
     lst = [el1, el2, el3, el4, el5, el6]
 
     assert all(el is not None for el in lst)
-dsf
 
 def test_can_add_and_remove_favorites(headless_chrome, root_url):
     headless_chrome.get(root_url)
