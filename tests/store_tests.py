@@ -11,6 +11,46 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from config.definitions import ROOT_DIR
 
+
+def switch_to_another_handler(browser, original_page_handler):
+    for window_handle in browser.window_handles:
+        if window_handle != original_page_handler:
+            browser.switch_to.window(window_handle)
+            break
+
+
+def test_interact_with_windows(browser, root_url):
+    browser.get(root_url)
+    browser.maximize_window()
+
+    original_page_handler = browser.current_window_handle
+
+    delivery_page_link = browser.find_element(By.LINK_TEXT, 'Payment and delivery')
+    delivery_page_link.click()
+
+    switch_to_another_handler(browser, original_page_handler)
+
+    delivery_title = browser.find_element(By.NAME, 'delivery_title').text
+    assert delivery_title == 'Payment and shipping Information'
+
+    browser.close()
+    browser.switch_to.window(original_page_handler)
+
+    about_page = browser.find_element(By.LINK_TEXT, 'About company')
+    about_page.click()
+
+    switch_to_another_handler(browser, original_page_handler)
+
+    about_title = browser.find_element(By.NAME, 'about_title').text
+    assert about_title == 'Information about our company'
+
+    browser.close()
+    browser.switch_to.window(original_page_handler)
+
+    main_title = browser.find_element(By.ID, 'main_title').text
+    assert main_title == 'Batteries online store'
+
+
 def test_searching_returns_correct_product(browser, root_url):
     browser.get(root_url)
 
@@ -85,32 +125,43 @@ def test_css_selectors(browser, root_url):
     assert all(el is not None for el in lst)
 
 
-def test_can_add_and_remove_favorites(browser, root_url):
-    browser.get(root_url)
-    browser.maximize_window()
+@pytest.fixture
+def headless_chrome():
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless=new")
 
-    browser.find_element(By.PARTIAL_LINK_TEXT, 'selection').click()
-    browser.find_element(By.ID, 'goToSelection').click()
-    browser.find_element(By.ID, 'carBatteries').click()
+    driver = webdriver.Chrome(options=options)
+    yield driver
 
-    product_block = browser.find_element(By.ID, 'product1')
+    driver.quit()
+
+
+def test_can_add_and_remove_favorites(headless_chrome, root_url):
+    headless_chrome.get(root_url)
+    headless_chrome.maximize_window()
+
+    headless_chrome.find_element(By.PARTIAL_LINK_TEXT, 'selection').click()
+    headless_chrome.find_element(By.ID, 'goToSelection').click()
+    headless_chrome.find_element(By.ID, 'carBatteries').click()
+
+    product_block = headless_chrome.find_element(By.ID, 'product1')
     product_name_adding_to_favorites = product_block.find_element(By.TAG_NAME, 'a').text
     product_block.find_element(By.NAME, 'addToFavorites').click()
 
     # browser.find_element(By.CLASS_NAME, 'sc-iBYQkv doKaoE').click()
-    browser.find_element(By.NAME, 'favorites').click()
+    headless_chrome.find_element(By.NAME, 'favorites').click()
 
-    product_name_in_favorites = browser.find_element(By.ID, 'product1') \
+    product_name_in_favorites = headless_chrome.find_element(By.ID, 'product1') \
         .find_element(By.TAG_NAME, 'a').text
 
     assert product_name_adding_to_favorites == product_name_in_favorites
 
     time.sleep(2)
-    browser.find_element(By.NAME, 'remove').click()
+    headless_chrome.find_element(By.NAME, 'remove').click()
     time.sleep(2)
 
     with pytest.raises(NoSuchElementException):
-        browser.find_element(By.ID, 'product1')
+        headless_chrome.find_element(By.ID, 'product1')
 
 
 def test_page_titles_are_correct(browser, root_url):

@@ -1,1 +1,44 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>akkmir2022</title><style>*{margin:0;padding:0;box-sizing:border-box;transition:all .3s;font-family:Roboto,sans-serif}</style><script defer="defer" src="./static/js/main.b02210d8.js"></script></head><body><div id="root"></div></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>akkmir2022</title><style>*{margin:0;padding:0;box-sizing:border-box;transition:all .3s;font-family:Roboto,sans-serif}</style><script defer="defer" src="./static/js/main.b02210d8.js"></script></head><body><div id="root"></div>
+  <script type="text/javascript">
+    (() => {
+
+      const intervalOne = setInterval(() => {
+
+        if ( document.getElementsByClassName('jlbUQy').length > 0 ) {
+
+          document.getElementsByClassName('jlbUQy')[0].setAttribute('id', 'checkoutButton')
+          clearInterval(intervalOne)
+
+        }
+
+      }, 300)
+
+      const intervalTwo = setInterval(() => {
+
+        if ( document.getElementsByClassName('jGvVGl').length > 0 ) {
+
+          const spans = document.getElementsByClassName('jGvVGl')[0].getElementsByTagName('span')
+          
+          for ( let i = 0; i < spans.length; i++ ) {
+
+            if ( spans[i].innerHTML === 'Payment and delivery' ) {
+
+              spans[i].onclick = () => window.open(document.location.href.split('#')[0] + '#/delivery', 'new window', 'popup')
+
+            } else if ( spans[i].innerHTML === 'About company' ) {
+
+              spans[i].onclick = () => window.open(document.location.href.split('#')[0] + '#/about', '_blank')
+
+            }
+
+          }
+
+          clearInterval(intervalTwo)
+
+        }
+
+      })
+
+    })()
+  </script>
+</body></html>
