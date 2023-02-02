@@ -125,17 +125,6 @@ def test_css_selectors(browser, root_url):
     assert all(el is not None for el in lst)
 
 
-@pytest.fixture
-def headless_chrome():
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless=new")
-
-    driver = webdriver.Chrome(options=options)
-    yield driver
-
-    driver.quit()
-
-
 def test_can_add_and_remove_favorites(headless_chrome, root_url):
     headless_chrome.get(root_url)
     headless_chrome.maximize_window()
@@ -194,13 +183,12 @@ def test_page_titles_are_correct(browser, root_url):
 
 
 @pytest.fixture
-def root_url():
-    return os.path.join(ROOT_DIR, 'store', 'index.html')
+def headless_chrome():
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless=new")
 
-
-@pytest.fixture(scope='module')
-def browser():
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(options=options)
     yield driver
 
     driver.quit()
+

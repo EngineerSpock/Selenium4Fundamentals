@@ -1,0 +1,6 @@
+{
+  "browser": "Chrome",
+  "mode": "Headless",
+  "implicit_wait": 15,
+  "page_load_strategy": "eager"
+}
