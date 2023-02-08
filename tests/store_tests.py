@@ -1,6 +1,8 @@
 import os.path
+import re
 import time
 import pytest
+from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.common import NoSuchElementException
 from selenium.webdriver import Keys
@@ -10,6 +12,29 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from config.definitions import ROOT_DIR
+
+
+def test_parse_products_by_specific_car(headless_chrome, root_url):
+    headless_chrome.get(root_url)
+
+    headless_chrome.find_element(By.XPATH, '//*[@id="root"]/section[2]/div[3]/div/div[5]/img[2]').click()  # bmw icon
+    headless_chrome.find_element(By.XPATH, '//*[@id="root"]/section[2]/div[3]/div/div[7]/div/div[3]/button[10]').click()  # x5
+    headless_chrome.find_element(By.XPATH,
+                         '//*[@id="root"]/section[2]/div[3]/div/div[7]/div/div[3]/div[1]/button').click()  # e70
+    headless_chrome.find_element(By.XPATH, '//*[@id="root"]/section[2]/div[3]/div/div[7]/div/div[4]/button[1]').click()  # 30d
+
+    soup = BeautifulSoup(headless_chrome.page_source)
+
+    rows = soup.findAll('div', id=re.compile('^product'))
+
+    products = []
+    for row in rows:
+        product_name = row.find('a').get_text()
+        products.append(product_name)
+
+    with open('scraped_products.txt', 'w') as f:
+        f.write('\n'.join(products))
+
 
 
 def switch_to_another_handler(browser, original_page_handler):
