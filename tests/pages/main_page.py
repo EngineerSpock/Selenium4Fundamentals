@@ -5,6 +5,11 @@ from tests.utils.locators import MainPageLocators as Locators
 
 
 class MainPage(BasePage):
+
+    def go_to_car_batteries(self):
+        self.click_on(Locators.SELECT_MENU)
+        self.click_on(Locators.SELECT_MENU_CAR_BATTERIES)
+
     def get_header(self):
         return self.find_element(Locators.PageHeader).text
 
