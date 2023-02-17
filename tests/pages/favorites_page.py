@@ -9,6 +9,7 @@ class FavoritesPage(BasePage):
 
     def remove_first(self):
         self.click_on(Locators.REMOVE)
+        return self
 
     def is_empty(self):
         try:

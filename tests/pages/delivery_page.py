@@ -10,3 +10,4 @@ class DeliveryPage(BasePage):
     def go_to_about_page(self):
         self.click_on(Locators.AboutPageLink)
         self.driver.switch_to.window(self.driver.window_handles[-1])
+        return AboutPage(self.driver)

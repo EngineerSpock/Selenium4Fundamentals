@@ -6,25 +6,36 @@ from tests.utils.locators import MainPageLocators as Locators
 
 class MainPage(BasePage):
 
-    def go_to_car_batteries(self):
-        self.click_on(Locators.SELECT_MENU)
-        self.click_on(Locators.SELECT_MENU_CAR_BATTERIES)
+    @staticmethod
+    def navigate(driver):
+        page = MainPage(driver)
+        page.navigate_to()
+        return page
 
     def get_header(self):
         return self.find_element(Locators.PageHeader).text
 
-    def select_car_batteries(self):
+    def search_for(self, txt):
+        self.enter_txt(Locators.SEARCH, txt)
+        self.wait_until_visibility_of_element_located(Locators.product_by_id(1))
+        return self
+
+    def go_to_car_batteries(self):
         self.click_on(Locators.SELECT_MENU)
         self.click_on(Locators.SELECT_MENU_CAR_BATTERIES)
+        return self
 
     def add_to_favorites(self, product_id):
         self.click_on(Locators.add_to_favorites(product_id))
+        return self
 
     def add_to_cart(self, product_id):
         self.click_on(Locators.add_to_cart(product_id))
+        return self
 
     def add_to_comparison(self, product_id):
         self.click_on(Locators.add_to_comparison(product_id))
+        return self
 
     def go_to_favorites(self):
         self.click_on(Locators.FAVORITES)
@@ -37,7 +48,3 @@ class MainPage(BasePage):
 
     def get_product_name(self, product_id):
         return self.find_element(Locators.product_link(product_id)).text
-
-    def search_for(self, txt):
-        self.enter_txt(Locators.SEARCH, txt)
-        self.wait_until_visibility_of_element_located(Locators.product_by_id(1))
