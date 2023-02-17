@@ -128,6 +128,8 @@ def test_page_titles_are_correct(browser, root_url):
     delivery_page_link = browser.find_element(By.LINK_TEXT, 'Payment and delivery')
     delivery_page_link.click()
 
+    browser.switch_to.window(browser.window_handles[-1])
+
     delivery_title = browser.find_element(By.NAME, 'delivery_title')
     assert delivery_title.text == 'Payment and shipping Information'
 
@@ -135,6 +137,8 @@ def test_page_titles_are_correct(browser, root_url):
 
     about_page = browser.find_element(By.LINK_TEXT, 'About company')
     about_page.click()
+
+    browser.switch_to.window(browser.window_handles[-1])
 
     about_title = browser.find_element(By.NAME, 'about_title')
     assert about_title.text == 'Information about our company'
